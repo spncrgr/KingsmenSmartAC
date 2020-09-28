@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KingsmenSmartAC.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace KingsmenSmartAC.API
 {
@@ -26,6 +28,12 @@ namespace KingsmenSmartAC.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSwaggerDocument();
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseInMemoryDatabase("KingsmenSmartAC");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +48,8 @@ namespace KingsmenSmartAC.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
 
             app.UseEndpoints(endpoints =>
             {
