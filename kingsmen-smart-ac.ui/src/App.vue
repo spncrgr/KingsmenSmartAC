@@ -1,18 +1,23 @@
 <template>
   <div id="app" class="container">
-      <div class="row justify-content-center">
-
+      <div class="row">
+          <DeviceList :devices="devices" />
       </div>
   </div>
 </template>
 
 <script>
     import axios from "axios";
+    import DeviceList from "./components/DeviceList";
+
     export default {
         data: function () {
             return {
                 devices: []
             }
+        },
+        components: {
+            DeviceList
         },
         mounted() {
             this.fetchDeviceData();
