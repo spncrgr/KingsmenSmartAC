@@ -13,8 +13,8 @@ namespace KingsmenSmartAC.API.Helpers
             {
                 var healthNotification = new Notification
                 {
-                    Device = context.Devices.Find(deviceReport.DeviceID),
-                    ShortDescription = $"{deviceReport.HealthStatus} Alert from Device {deviceReport.DeviceID}",
+                    Device = context.Devices.Find(deviceReport.DeviceId),
+                    ShortDescription = $"{deviceReport.HealthStatus} Alert from Device {deviceReport.DeviceId}",
                     Description = "Alert details here."
                 };
                 await context.Notifications.AddAsync(healthNotification);
@@ -24,8 +24,8 @@ namespace KingsmenSmartAC.API.Helpers
             {
                 var coLevelNotification = new Notification
                 {
-                    Device = context.Devices.Find(deviceReport.DeviceID),
-                    ShortDescription = $"CO Level Alert from Device {deviceReport.DeviceID}",
+                    Device = context.Devices.Find(deviceReport.DeviceId),
+                    ShortDescription = $"CO Level Alert from Device {deviceReport.DeviceId}",
                     Description = "Alert details here."
                 };
                 await context.Notifications.AddAsync(coLevelNotification);

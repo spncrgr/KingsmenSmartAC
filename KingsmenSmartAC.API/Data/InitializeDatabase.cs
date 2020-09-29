@@ -47,12 +47,13 @@ namespace KingsmenSmartAC.API.Data
             var allDevices = await context.Devices.ToListAsync();
             foreach (var device in allDevices)
             {
-                var reports = new DeviceReport[RandomGenerator.Next(1, 20)];
+                var reports = new DeviceReport[RandomGenerator.Next(1, 5)];
                 for (var i = 0; i < reports.Length; i++)
                 {
                     var report = new DeviceReport
                     {
-                        DeviceID = device.DeviceID,
+                        DeviceId = device.DeviceId,
+                        Temperature = RandomGenerator.Next(30,100),
                         COLevel = RandomGenerator.Next(1, 12),
                         Humidity = RandomGenerator.Next(30, 80),
                         HealthStatus = (HealthStatus) RandomGenerator.Next(3)

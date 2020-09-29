@@ -17,20 +17,12 @@ namespace KingsmenSmartAC.API.Models
 
     public class DeviceReport
     {
-        public long ReportID { get; set; }
-        [Column(TypeName = "decimal(5,2)")] public decimal Temperature { get; set; }
-        [Column(TypeName = "decimal(5,2)")] public decimal Humidity { get; set; }
-
-        [Display(Name = "CO Level")]
-        [Column(TypeName = "decimal(5,2)")]
+        public long DeviceReportId { get; set; }
+        public decimal Temperature { get; set; }
+        public decimal Humidity { get; set; }
         public decimal COLevel { get; set; }
-
-        [Display(Name = "Device ID")] public long DeviceID { get; set; }
-
-        [Display(Name = "Created")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDateTime { get; set; }
-
         public HealthStatus HealthStatus { get; set; }
+
+        public long DeviceId { get; set; }
     }
 }

@@ -29,7 +29,9 @@ namespace KingsmenSmartAC.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Device>>> Get()
         {
-            return await _context.Devices.ToListAsync();
+            return await _context.Devices
+                .Include(device => device.DeviceReports)
+                .ToListAsync();
         }
 
         // GET api/<DeviceController>/5

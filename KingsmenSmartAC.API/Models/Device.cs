@@ -9,18 +9,12 @@ namespace KingsmenSmartAC.API.Models
 {
     public class Device
     {
-        public long DeviceID { get; set; }
+        public long DeviceId { get; set; }
         public string SerialNumber { get; set; }
         public string FirmwareVersion { get; set; }
 
-        [Display(Name = "Created")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedDateTime { get; set; }
-
-        [Display(Name = "Updated")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime UpdatedDateTime { get; set; }
-
-        public Guid APIKey { get; set; }
+        // Relationship properties
+        public List<DeviceReport> DeviceReports { get; set; }
+        public List<Notification> Notifications { get; set; }
     }
 }
