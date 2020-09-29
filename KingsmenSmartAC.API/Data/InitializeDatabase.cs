@@ -23,7 +23,7 @@ namespace KingsmenSmartAC.API.Data
                 return;
             }
 
-            var devices = new Device[20];
+            var devices = new Device[50];
             for (var i = 0; i < devices.Length; i++)
             {
                 var device = new Device
