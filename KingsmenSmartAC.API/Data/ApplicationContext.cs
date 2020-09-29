@@ -15,7 +15,5 @@ namespace KingsmenSmartAC.API.Data
 
         // Tables
         public DbSet<Device> Devices { get; set; }
-        public DbSet<DeviceReport> DeviceReports { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
     }
 }

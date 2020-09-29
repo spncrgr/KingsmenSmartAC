@@ -7,14 +7,22 @@ using System.Threading.Tasks;
 
 namespace KingsmenSmartAC.API.Models
 {
+    public enum HealthStatus
+    {
+        Ok,
+        NeedsService,
+        NeedsNewFilter,
+        GasLeak
+    }
+
     public class Device
     {
         public long DeviceId { get; set; }
         public string SerialNumber { get; set; }
         public string FirmwareVersion { get; set; }
-
-        // Relationship properties
-        public List<DeviceReport> DeviceReports { get; set; }
-        public List<Notification> Notifications { get; set; }
+        public decimal Temperature { get; set; }
+        public decimal Humidity { get; set; }
+        public decimal COLevel { get; set; }
+        public HealthStatus HealthStatus { get; set; }
     }
 }
