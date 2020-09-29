@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KingsmenSmartAC.API.Data
 {
-    public class InitializeDatabase
+    public static class InitializeDatabase
     {
         private const string Password = "Password1!";
         private static readonly Random RandomGenerator = new Random();
@@ -23,7 +23,7 @@ namespace KingsmenSmartAC.API.Data
                 return;
             }
 
-            var devices = new Device[50];
+            var devices = new Device[200];
             for (var i = 0; i < devices.Length; i++)
             {
                 var device = new Device

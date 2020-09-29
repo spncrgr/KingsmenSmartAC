@@ -27,6 +27,8 @@ export default {
       filterKey: "deviceId",
       filterDir: "asc",
       searchTerms: "",
+      pageSize: 25,
+      pageNumber: 1,
     };
   },
   components: {
@@ -34,13 +36,7 @@ export default {
     SearchDevices,
   },
   mounted() {
-    axios
-      .get("http://localhost:5000/api/device", {
-        responseType: "json",
-      })
-      .then((response) => {
-        this.devices = response.data;
-      });
+    this.getDeviceList();
   },
   computed: {
     searchedDevices: function() {
@@ -65,6 +61,28 @@ export default {
     },
   },
   methods: {
+    getDeviceList: function() {
+      axios
+        .get("http://localhost:5000/api/device", {
+          responseType: "json",
+          params: {
+            pageSize: this.pageSize,
+            pageNumber: this.pageNumber,
+          },
+        })
+        .then((response) => {
+          this.devices = response.data;
+        });
+    },
+    getAllDevices: function() {
+      axios
+        .get("http://localhost:5000/api/Device/devices", {
+          responseType: "json",
+        })
+        .then((response) => {
+          this.devices = response.data;
+        });
+    },
     searchDevices: function(terms) {
       this.searchTerms = terms;
     },

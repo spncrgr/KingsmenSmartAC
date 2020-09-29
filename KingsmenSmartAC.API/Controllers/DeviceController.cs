@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KingsmenSmartAC.API.Data;
+using KingsmenSmartAC.API.Helpers;
 using KingsmenSmartAC.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -27,10 +28,21 @@ namespace KingsmenSmartAC.API.Controllers
         // GET: api/<DeviceController>
         [ProducesResponseType(200)]
         [HttpGet]
-        public async Task<ActionResult<List<Device>>> Get()
+        public async Task<ActionResult<List<Device>>> Get([FromQuery] PagingParameters pagingParameters)
+        {
+            return await _context.Devices
+                .Skip((pagingParameters.PageNumber - 1) * pagingParameters.PageSize)
+                .Take(pagingParameters.PageSize)
+                .ToListAsync();
+        }
+
+        [ProducesResponseType(200)]
+        [HttpGet("devices")]
+        public async Task<ActionResult<List<Device>>> GetAll()
         {
             return await _context.Devices.ToListAsync();
         }
+
 
         // GET api/<DeviceController>/5
         [HttpGet("{id}")]
