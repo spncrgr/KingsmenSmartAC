@@ -6,14 +6,14 @@
         <th>ID</th>
         <th>Serial #</th>
         <th>Firmware Version</th>
-        <th>Latest Health Status</th>
-        <th>Latest CO2 Level</th>
-        <th>Latest Temperature</th>
-        <th>Latest Humidity</th>
+        <th>Health Status</th>
+        <th>CO2 Level</th>
+        <th>Temperature</th>
+        <th>Humidity</th>
       </thead>
       <tbody>
-        <tr v-for="device in devices" :key="device.deviceID">
-          <td>{{ device.deviceID }}</td>
+        <tr v-for="device in devices" :key="device.deviceId">
+          <td>{{ device.deviceId }}</td>
           <td>{{ device.serialNumber }}</td>
           <td>{{ device.firmwareVersion }}</td>
           <td>{{ device.healthStatus }}</td>
