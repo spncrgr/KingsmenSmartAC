@@ -23,7 +23,7 @@ namespace KingsmenSmartAC.API.Data
                 return;
             }
 
-            var devices = new Device[200];
+            var devices = new Device[1000];
             for (var i = 0; i < devices.Length; i++)
             {
                 var firmwareVersions = new[]
