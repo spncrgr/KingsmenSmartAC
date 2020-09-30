@@ -46,7 +46,7 @@ namespace KingsmenSmartAC.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                 {
-                    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+                    var keyVaultEndpoint = new Uri("https://kingsmendemoappsvc.azurewebsites.net");
                     config.AddAzureKeyVault(
                         keyVaultEndpoint,
                         new DefaultAzureCredential());
