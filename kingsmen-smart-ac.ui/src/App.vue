@@ -1,23 +1,37 @@
 <template>
   <div id="app" class="container">
-    <div class="row">
-      <SearchDevices
-        @searchRecords="searchDevices"
-        @request-key="changeKey"
-        @request-dir="changeDir"
-        :myKey="filterKey"
-        :myDir="filterDir"
-      />
-      <PageNavigation
-        :total-count="totalCount"
-        :page-size="pageSize"
-        :total-pages="totalPages"
-        :current-page="pageNumber"
-        :has-previous="hasPrev"
-        :has-next="hasNext"
-      />
-      <DeviceList :devices="filteredDevices" />
+    <div class="card m-5">
+        <h2 class="card-header">Device List</h2>
+        <div class="card-body">
+      <div class="row">
+        <SearchDevices
+          @searchRecords="searchDevices"
+          @request-key="changeKey"
+          @request-dir="changeDir"
+          :myKey="filterKey"
+          :myDir="filterDir"
+        />
+      </div>
+      <div class="row">
+        <PageSize
+          :pageSize="pageSize"
+          @change-page-size="setPageSize"
+          @view-all-devices="unsetPageSize"
+        />
+      </div>
+      <div class="row">
+        <PageNavigation
+          :total-count="totalCount"
+          :page-size="pageSize"
+          :total-pages="totalPages"
+          :current-page="pageNumber"
+          :has-previous="hasPrev"
+          :has-next="hasNext"
+        />
+      </div>
+      </div>
     </div>
+        <DeviceList :devices="filteredDevices" />
   </div>
 </template>
 
@@ -28,6 +42,7 @@ import _ from "lodash";
 import DeviceList from "./components/DeviceList";
 import SearchDevices from "./components/SearchDevices";
 import PageNavigation from "./components/PageNavigation";
+import PageSize from "./components/PageSize";
 
 export default {
   data: function() {
@@ -48,6 +63,7 @@ export default {
     DeviceList,
     SearchDevices,
     PageNavigation,
+    PageSize,
   },
   mounted() {
     this.getDeviceList(this.pageSize, this.pageNumber);
@@ -113,6 +129,14 @@ export default {
     },
     changeDir: function(value) {
       this.filterDir = value;
+    },
+    setPageSize: function(value) {
+      this.pageSize = value;
+      this.getDeviceList(this.pageSize, this.pageNumber);
+    },
+    unsetPageSize: function() {
+      this.pageSize = -1;
+      this.getAllDevices();
     },
   },
 };

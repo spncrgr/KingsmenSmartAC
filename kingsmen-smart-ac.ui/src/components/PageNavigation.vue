@@ -1,12 +1,6 @@
 <template>
-  <div class="row">
-    <nav aria-label="Page navigation example">
+    <nav class="my-3" aria-label="Page navigation example">
       <ul class="pagination">
-        <li class="page-item" :class="{ disabled: prevIsDisabled }">
-          <a class="page-link" href="#">
-            <span aria-hidden="true">Previous</span>
-          </a>
-        </li>
         <li
           class="page-item"
           v-for="(n, i) in Number(totalPages)"
@@ -15,14 +9,8 @@
         >
           <a class="page-link" href="#">{{ n }}</a>
         </li>
-        <li class="page-item" :class="{ disabled: nextIsDisabled }">
-          <a class="page-link" href="#" aria-label="Next">
-            <span>Next</span>
-          </a>
-        </li>
       </ul>
     </nav>
-  </div>
 </template>
 
 <script>

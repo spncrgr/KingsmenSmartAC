@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 col-md-10 col-lg-7">
+  <div>
     <div class="input-group my-3">
       <input
         id="SearchDevices"
