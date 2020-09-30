@@ -136,6 +136,7 @@ export default {
     },
     unsetPageSize: function() {
       this.pageSize = -1;
+      this.totalPages = 0;
       this.getAllDevices();
     },
   },
