@@ -31,7 +31,7 @@ namespace KingsmenSmartAC.API
         {
             services.AddControllers();
             services.AddOpenApiDocument();
-            var keyVaultEndpoint = new Uri("https://kingsmendemoappsvc.azurewebsites.net");
+            var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
             var client = new SecretClient(keyVaultEndpoint, new DefaultAzureCredential());
             var connectionString = client.GetSecret("ConnectionStrings--DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
