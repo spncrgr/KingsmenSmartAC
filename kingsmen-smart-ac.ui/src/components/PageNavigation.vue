@@ -7,6 +7,7 @@
           v-for="(n, i) in Number(totalPages)"
           :key="i"
           :class="{ active: n === Number(currentPage) }"
+          @click="$emit('change-page', n)"
         >
           <a class="page-link" href="#">{{ n }}</a>
         </li>

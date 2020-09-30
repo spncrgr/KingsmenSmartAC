@@ -5,7 +5,7 @@
         <div class="card-body">
       <div class="row">
         <SearchDevices
-          @searchRecords="searchDevices"
+          @search-devices="searchDevices"
           @request-key="changeKey"
           @request-dir="changeDir"
           :myKey="filterKey"
@@ -27,17 +27,17 @@
           :current-page="pageNumber"
           :has-previous="hasPrev"
           :has-next="hasNext"
+          @change-page="changePage"
         />
       </div>
       </div>
     </div>
-        <DeviceList :devices="filteredDevices" />
+        <DeviceList :devices="devices" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import _ from "lodash";
 
 import DeviceList from "./components/DeviceList";
 import SearchDevices from "./components/SearchDevices";
@@ -69,26 +69,13 @@ export default {
     this.getDeviceList(this.pageSize, this.pageNumber);
   },
   computed: {
-    searchedDevices: function() {
-      return this.devices.filter((item) => {
-        return (
-          item.deviceId === Number(this.searchTerms) ||
-          item.firmwareVersion
-            .toLowerCase()
-            .match(this.searchTerms.toLowerCase()) ||
-          item.serialNumber.toLowerCase().match(this.searchTerms.toLowerCase())
-        );
-      });
-    },
-    filteredDevices: function() {
-      return _.orderBy(
-        this.searchedDevices,
-        (item) => {
-          return item[this.filterKey];
-        },
-        this.filterDir
-      );
-    },
+    orderByParam: function() {
+      var param = this.filterKey;
+      if (this.filterDir === "desc") {
+        param = param + "_" + this.filterDir;
+      }
+      return param;
+    }
   },
   methods: {
     getDeviceList: function(pageSize, pageNumber) {
@@ -98,6 +85,8 @@ export default {
           params: {
             pageSize: pageSize,
             pageNumber: pageNumber,
+            searchTerms: this.searchTerms,
+            orderBy: this.orderByParam,
           },
         })
         .then((response) => {
@@ -123,12 +112,15 @@ export default {
     },
     searchDevices: function(terms) {
       this.searchTerms = terms;
+      this.getDeviceList(this.pageSize, this.CurrentPage);
     },
     changeKey: function(value) {
       this.filterKey = value;
+      this.getDeviceList(this.pageSize, this.CurrentPage);
     },
     changeDir: function(value) {
       this.filterDir = value;
+      this.getDeviceList(this.pageSize, this.CurrentPage);
     },
     setPageSize: function(value) {
       this.pageSize = value;
@@ -139,6 +131,10 @@ export default {
       this.totalPages = 0;
       this.getAllDevices();
     },
+    changePage: function(value) {
+      this.CurrentPage = value;
+      this.getDeviceList(this.pageSize, this.CurrentPage);
+    }
   },
 };
 </script>

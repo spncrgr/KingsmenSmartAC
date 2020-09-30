@@ -3,12 +3,20 @@
     <div class="input-group my-3">
       <input
         id="SearchDevices"
-        placeholder="Search"
         type="text"
         class="form-control"
         aria-label="Search Devices"
         v-model="searchTerm"
       />
+
+      <div class="input-group-append">
+        <button
+          class="btn btn-primary"
+          @click="$emit('search-devices', searchTerm)"
+        >
+          Search
+        </button>
+      </div>
 
       <div class="input-group-append">
         <button
@@ -143,11 +151,6 @@ export default {
   name: "SearchAppointments",
   components: {},
   props: ["myKey", "myDir"],
-  watch: {
-    searchTerm: function() {
-      this.$emit("searchRecords", this.searchTerm);
-    },
-  },
   data() {
     return {
       searchTerm: "",

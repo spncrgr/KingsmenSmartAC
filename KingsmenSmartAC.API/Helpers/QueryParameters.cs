@@ -4,6 +4,8 @@
     {
         private const int MaxPageSize = 500;
         private int _pageSize = 50;
+        private string _orderBy = "";
+        private string _searchTerms = "";
         public int PageNumber { get; set; } = 1;
 
         public int PageSize
@@ -18,7 +20,22 @@
             }
         }
 
-        public string SearchTerms { get; set; } = "";
-        public string OrderBy { get; set; } = "";
+        public string SearchTerms
+        {
+            get => _searchTerms;
+            set
+            {
+                _searchTerms = (value == null) ? "" : value;
+            }
+        }
+
+        public string OrderBy
+        {
+            get { return _orderBy; }
+            set
+            {
+                _orderBy = (value == null) ? "" : value;
+            }
+        }
     }
 }
