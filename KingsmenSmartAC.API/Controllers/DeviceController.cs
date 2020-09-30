@@ -8,6 +8,8 @@ using KingsmenSmartAC.API.Helpers;
 using KingsmenSmartAC.API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,10 +32,21 @@ namespace KingsmenSmartAC.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Device>>> Get([FromQuery] PagingParameters pagingParameters)
         {
-            return await _context.Devices
-                .Skip((pagingParameters.PageNumber - 1) * pagingParameters.PageSize)
-                .Take(pagingParameters.PageSize)
-                .ToListAsync();
+            var devices = await PagedList<Device>.ToPagedListAsync(_context.Devices, pagingParameters.PageNumber,
+                pagingParameters.PageSize);
+
+            var paginationData = new
+            {
+                devices.TotalCount,
+                devices.PageSize,
+                devices.CurrentPage,
+                devices.HasNext,
+                devices.HasPrevious
+            };
+
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(paginationData));
+
+            return devices;
         }
 
         [ProducesResponseType(200)]
