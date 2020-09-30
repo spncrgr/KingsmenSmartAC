@@ -26,10 +26,19 @@ namespace KingsmenSmartAC.API.Data
             var devices = new Device[200];
             for (var i = 0; i < devices.Length; i++)
             {
+                var firmwareVersions = new[]
+                {
+                    $"1.0.{RandomGenerator.Next(10000, 20000)}",
+                    $"1.0.{RandomGenerator.Next(10000, 20000)}",
+                    $"1.0.{RandomGenerator.Next(20000, 25000)}",
+                    $"1.0.{RandomGenerator.Next(30000, 35000)}",
+                    $"1.0.{RandomGenerator.Next(30000, 35000)}",
+                    $"1.0.{RandomGenerator.Next(10000, 35000)}",
+                };
                 var device = new Device
                 {
                     SerialNumber = Guid.NewGuid().ToString("N").Substring(0, 12),
-                    FirmwareVersion = $"1.0.{RandomGenerator.Next(10000, 35000)}",
+                    FirmwareVersion = firmwareVersions[RandomGenerator.Next(0, 5)],
                     Temperature = RandomGenerator.Next(30, 100),
                     COLevel = RandomGenerator.Next(1, 12),
                     Humidity = RandomGenerator.Next(30, 80),
