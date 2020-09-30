@@ -35,11 +35,12 @@ namespace KingsmenSmartAC.API.Controllers
             // Need to see if the search term could be a Device ID
             // Using TryParse to maintain safety from malicious input
             long.TryParse(queryParams.SearchTerms, out var deviceId);
-            var devices = _context.Devices
-                .Where(d =>
-                    d.DeviceId == deviceId ||
-                    d.SerialNumber.Contains(queryParams.SearchTerms) ||
-                    d.FirmwareVersion.Contains(queryParams.SearchTerms));
+
+            // Process any search terms provided
+            var devices = FilterDevices(queryParams, deviceId);
+            // Sort the filtered list, if specified
+            devices = SortDevices(queryParams, devices);
+
             var deviceList = await PagedList<Device>.ToPagedListAsync(devices, queryParams.PageNumber,
                 queryParams.PageSize);
 
@@ -63,6 +64,39 @@ namespace KingsmenSmartAC.API.Controllers
         public async Task<ActionResult<List<Device>>> GetAll()
         {
             return await _context.Devices.ToListAsync();
+        }
+
+        private IQueryable<Device> FilterDevices(QueryParameters queryParams, long deviceId)
+        {
+            var devices = _context.Devices
+                .Where(d =>
+                    d.DeviceId == deviceId ||
+                    d.SerialNumber.Contains(queryParams.SearchTerms) ||
+                    d.FirmwareVersion.Contains(queryParams.SearchTerms));
+            return devices;
+        }
+
+        private static IQueryable<Device> SortDevices(QueryParameters queryParams, IQueryable<Device> devices)
+        {
+            // This isn't pretty, but it works
+            devices = queryParams.OrderBy switch
+            {
+                "deviceId" => devices.OrderBy(d => d.DeviceId),
+                "deviceId_desc" => devices.OrderByDescending(d => d.DeviceId),
+                "serialNumber" => devices.OrderBy(d => d.SerialNumber),
+                "serialNumber_desc" => devices.OrderByDescending(d => d.SerialNumber),
+                "firmwareVersion" => devices.OrderBy(d => d.FirmwareVersion),
+                "firmwareVersion_desc" => devices.OrderByDescending(d => d.FirmwareVersion),
+                "healthStatus" => devices.OrderBy(d => d.HealthStatus),
+                "healthStatus_desc" => devices.OrderByDescending(d => d.HealthStatus),
+                "temperature" => devices.OrderBy(d => d.Temperature),
+                "temperature_desc" => devices.OrderByDescending(d => d.Temperature),
+                "humidity" => devices.OrderBy(d => d.Humidity),
+                "humidity_desc" => devices.OrderByDescending(d => d.Humidity),
+                _ => devices.OrderBy(d => d.DeviceId)
+            };
+
+            return devices;
         }
     }
 }
