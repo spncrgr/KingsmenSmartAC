@@ -1,6 +1,6 @@
 ﻿namespace KingsmenSmartAC.API.Helpers
 {
-    public class PagingParameters
+    public class QueryParameters
     {
         private const int MaxPageSize = 500;
         private int _pageSize = 50;
@@ -17,5 +17,7 @@
                 _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
             }
         }
+
+        public string SearchTerms { get; set; } = "";
     }
 }

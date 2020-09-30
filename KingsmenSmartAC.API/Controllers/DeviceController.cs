@@ -30,28 +30,36 @@ namespace KingsmenSmartAC.API.Controllers
         // GET: api/<DeviceController>
         [ProducesResponseType(200)]
         [HttpGet]
-        public async Task<ActionResult<List<Device>>> Get([FromQuery] PagingParameters pagingParameters)
+        public async Task<ActionResult<List<Device>>> Get([FromQuery] QueryParameters queryParams)
         {
-            var devices = await PagedList<Device>.ToPagedListAsync(_context.Devices, pagingParameters.PageNumber,
-                pagingParameters.PageSize);
+            // Need to see if the search term could be a Device ID
+            // Using TryParse to maintain safety from malicious input
+            long.TryParse(queryParams.SearchTerms, out var deviceId);
+            var devices = _context.Devices
+                .Where(d =>
+                    d.DeviceId == deviceId ||
+                    d.SerialNumber.Contains(queryParams.SearchTerms) ||
+                    d.FirmwareVersion.Contains(queryParams.SearchTerms));
+            var deviceList = await PagedList<Device>.ToPagedListAsync(devices, queryParams.PageNumber,
+                queryParams.PageSize);
 
             var paginationData = new
             {
-                devices.TotalCount,
-                devices.PageSize,
-                devices.TotalPages,
-                devices.CurrentPage,
-                devices.HasNext,
-                devices.HasPrevious
+                deviceList.TotalCount,
+                deviceList.PageSize,
+                deviceList.TotalPages,
+                deviceList.CurrentPage,
+                deviceList.HasNext,
+                deviceList.HasPrevious
             };
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(paginationData));
 
-            return devices;
+            return deviceList;
         }
 
         [ProducesResponseType(200)]
-        [HttpGet("devices")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<List<Device>>> GetAll()
         {
             return await _context.Devices.ToListAsync();
