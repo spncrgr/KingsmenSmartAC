@@ -1,5 +1,6 @@
 <template>
-    <nav class="my-3" aria-label="Page navigation example">
+  <div class="d-sm-flex my-3 overflow-auto">
+    <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li
           class="page-item"
@@ -11,6 +12,7 @@
         </li>
       </ul>
     </nav>
+  </div>
 </template>
 
 <script>

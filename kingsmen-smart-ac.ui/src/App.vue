@@ -52,7 +52,7 @@ export default {
       filterDir: "asc",
       searchTerms: "",
       totalCount: 0,
-      pageSize: 50,
+      pageSize: 500,
       totalPages: 0,
       pageNumber: 1,
       hasPrev: false,
