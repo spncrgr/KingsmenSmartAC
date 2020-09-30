@@ -39,6 +39,7 @@ namespace KingsmenSmartAC.API.Controllers
             {
                 devices.TotalCount,
                 devices.PageSize,
+                devices.TotalPages,
                 devices.CurrentPage,
                 devices.HasNext,
                 devices.HasPrevious

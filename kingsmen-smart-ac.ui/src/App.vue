@@ -8,6 +8,14 @@
         :myKey="filterKey"
         :myDir="filterDir"
       />
+      <PageNavigation
+        :total-count="totalCount"
+        :page-size="pageSize"
+        :total-pages="totalPages"
+        :current-page="pageNumber"
+        :has-previous="hasPrev"
+        :has-next="hasNext"
+      />
       <DeviceList :devices="filteredDevices" />
     </div>
   </div>
@@ -19,6 +27,7 @@ import _ from "lodash";
 
 import DeviceList from "./components/DeviceList";
 import SearchDevices from "./components/SearchDevices";
+import PageNavigation from "./components/PageNavigation";
 
 export default {
   data: function() {
@@ -27,16 +36,21 @@ export default {
       filterKey: "deviceId",
       filterDir: "asc",
       searchTerms: "",
-      pageSize: 25,
+      totalCount: 0,
+      pageSize: 50,
+      totalPages: 0,
       pageNumber: 1,
+      hasPrev: false,
+      hasNext: false,
     };
   },
   components: {
     DeviceList,
     SearchDevices,
+    PageNavigation,
   },
   mounted() {
-    this.getDeviceList();
+    this.getDeviceList(this.pageSize, this.pageNumber);
   },
   computed: {
     searchedDevices: function() {
@@ -61,16 +75,24 @@ export default {
     },
   },
   methods: {
-    getDeviceList: function() {
+    getDeviceList: function(pageSize, pageNumber) {
       axios
-        .get("http://localhost:5000/api/device", {
+        .get("https://localhost:5001/api/device", {
           responseType: "json",
           params: {
-            pageSize: this.pageSize,
-            pageNumber: this.pageNumber,
+            pageSize: pageSize,
+            pageNumber: pageNumber,
           },
         })
         .then((response) => {
+          var paginationData = JSON.parse(response.headers["x-pagination"]);
+          this.totalCount = paginationData.TotalCount;
+          this.pageSize = paginationData.PageSize;
+          this.totalPages = paginationData.TotalPages;
+          this.pageNumber = paginationData.CurrentPage;
+          this.hasPrev = paginationData.HasPrevious;
+          this.hasNext = paginationData.HasNext;
+
           this.devices = response.data;
         });
     },
