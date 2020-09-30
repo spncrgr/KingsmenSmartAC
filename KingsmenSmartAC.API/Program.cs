@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KingsmenSmartAC.API.Data;
 using Microsoft.Extensions.DependencyInjection;
+using Azure.Identity;
 
 namespace KingsmenSmartAC.API
 {
@@ -21,29 +22,35 @@ namespace KingsmenSmartAC.API
             {
                 var services = scope.ServiceProvider;
                 var applicationContext = services.GetRequiredService<ApplicationContext>();
+                var dbCreated = applicationContext.Database.EnsureCreated();
 
-                try
+                if (!dbCreated)
                 {
-                    InitializeDatabase.InitializeApplication(services).Wait();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while initializing the Database");
-                    throw;
+                    try
+                    {
+                        InitializeDatabase.InitializeApplication(services).Wait();
+                    }
+                    catch (Exception ex)
+                    {
+                        var logger = services.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(ex, "An error occurred while initializing the Database");
+                        throw;
+                    }
                 }
             }
 
             host.Run();
-
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureAppConfiguration((context, config) =>
                 {
-                    webBuilder.UseStartup<Startup>();
-                });
+                    var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+                    config.AddAzureKeyVault(
+                        keyVaultEndpoint,
+                        new DefaultAzureCredential());
+                })
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

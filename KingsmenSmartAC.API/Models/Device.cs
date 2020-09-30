@@ -20,9 +20,9 @@ namespace KingsmenSmartAC.API.Models
         public long DeviceId { get; set; }
         public string SerialNumber { get; set; }
         public string FirmwareVersion { get; set; }
-        public decimal Temperature { get; set; }
-        public decimal Humidity { get; set; }
-        public decimal COLevel { get; set; }
+        [Column(TypeName = "decimal(5,2)")] public decimal Temperature { get; set; }
+        [Column(TypeName = "decimal(5,2)")] public decimal Humidity { get; set; }
+        [Column(TypeName = "decimal(5,2)")] public decimal COLevel { get; set; }
         public HealthStatus HealthStatus { get; set; }
     }
 }

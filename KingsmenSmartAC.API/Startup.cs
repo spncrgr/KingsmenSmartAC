@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using KingsmenSmartAC.API.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,10 +31,12 @@ namespace KingsmenSmartAC.API
         {
             services.AddControllers();
             services.AddSwaggerDocument();
+            var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
+            var client = new SecretClient(keyVaultEndpoint, new DefaultAzureCredential());
+            var connectionString = client.GetSecret("ConnectionStrings--DefaultConnection");
             services.AddDbContext<ApplicationContext>(options =>
             {
-                // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                options.UseInMemoryDatabase("KingsmenSmartAC");
+                options.UseSqlServer(connectionString.Value.Value);
             });
         }
 
